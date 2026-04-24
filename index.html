@@ -10,6 +10,7 @@
     />
     <link rel="canonical" href="https://shroomseeker.app/" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="apple-touch-icon" href="./assets/images/icon.png" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -189,26 +190,17 @@
         <nav
           class="mt-4 flex items-center justify-between rounded-2xl border border-white/10 bg-night/70 px-4 py-3 backdrop-blur-lg shadow-card"
         >
-          <a href="#top" class="flex items-center gap-2 text-white">
-            <svg class="h-7 w-7" viewBox="0 0 64 64" aria-hidden="true">
-              <defs>
-                <linearGradient id="nav-cap" x1="0" x2="0" y1="0" y2="1">
-                  <stop offset="0" stop-color="#51C878" />
-                  <stop offset="1" stop-color="#1A8038" />
-                </linearGradient>
-              </defs>
-              <path
-                d="M8 32c0-11 9-20 24-20s24 9 24 20c0 3-2 5-5 5H13c-3 0-5-2-5-5z"
-                fill="url(#nav-cap)"
-              />
-              <circle cx="22" cy="26" r="3" fill="#fff" opacity=".85" />
-              <circle cx="40" cy="22" r="2.5" fill="#fff" opacity=".85" />
-              <path d="M24 37h16v11c0 3-3 5-8 5s-8-2-8-5V37z" fill="#F5E6CA" />
-            </svg>
+          <a href="#top" class="flex items-center gap-2.5 text-white">
+            <img
+              src="./assets/images/icon.png"
+              alt="ShroomSeeker"
+              class="h-8 w-8 rounded-lg shadow-md"
+            />
             <span class="font-bold tracking-tight">ShroomSeeker</span>
           </a>
           <div class="hidden md:flex items-center gap-8 text-sm text-white/80">
             <a href="#features" class="hover:text-white transition">Features</a>
+            <a href="#screens" class="hover:text-white transition">Screens</a>
             <a href="#how" class="hover:text-white transition">How it works</a>
             <a href="#pricing" class="hover:text-white transition">Pricing</a>
             <a href="#faq" class="hover:text-white transition">FAQ</a>
@@ -306,101 +298,30 @@
           </div>
         </div>
 
-        <!-- Phone mockup -->
-        <div class="reveal relative mx-auto w-[300px] sm:w-[340px] lg:w-[360px]">
+        <!-- Phone mockup with real screenshot -->
+        <div class="reveal relative mx-auto w-[280px] sm:w-[320px] lg:w-[340px]">
           <div
             class="relative aspect-[9/19.5] rounded-[3rem] border-[10px] border-ink bg-black shadow-[0_40px_100px_-20px_rgba(52,199,89,0.45)]"
           >
-            <!-- notch -->
-            <div
-              class="absolute left-1/2 top-2 -translate-x-1/2 h-6 w-28 rounded-full bg-black z-20"
-            ></div>
-            <!-- map -->
-            <div class="absolute inset-[2px] rounded-[2.4rem] overflow-hidden topo">
-              <!-- trail -->
-              <svg class="absolute inset-0 w-full h-full" viewBox="0 0 300 620" preserveAspectRatio="none">
-                <path
-                  class="trail"
-                  d="M40 560 C 80 480, 60 420, 140 380 S 240 300, 200 220 S 80 160, 140 80"
-                  fill="none"
-                  stroke="#34C759"
-                  stroke-width="4"
-                  stroke-linecap="round"
-                  opacity="0.9"
-                />
-                <!-- polygon zone -->
-                <path
-                  d="M170 170 L 250 200 L 260 280 L 200 300 L 150 240 Z"
-                  fill="rgba(52,199,89,0.18)"
-                  stroke="#34C759"
-                  stroke-width="1.5"
-                  stroke-dasharray="4 4"
-                />
-              </svg>
-              <!-- mushroom pins -->
+            <div class="absolute inset-[2px] rounded-[2.4rem] overflow-hidden bg-white">
               <img
-                src="./assets/markers/marker-boletus.png"
-                alt=""
-                class="absolute left-[22%] top-[66%] w-10 drop-shadow-lg"
+                src="./assets/images/active-hunt.png"
+                alt="ShroomSeeker active hunt screen with live GPS trail and mushroom markers"
+                class="absolute inset-0 h-full w-full object-cover"
               />
-              <img
-                src="./assets/markers/marker-chanterelle.png"
-                alt=""
-                class="absolute left-[55%] top-[54%] w-9 drop-shadow-lg"
-              />
-              <img
-                src="./assets/markers/marker-morel.png"
-                alt=""
-                class="absolute left-[42%] top-[28%] w-9 drop-shadow-lg"
-              />
-              <img
-                src="./assets/markers/marker-red-cap-boletus.png"
-                alt=""
-                class="absolute left-[68%] top-[38%] w-9 drop-shadow-lg"
-              />
-
-              <!-- top HUD -->
-              <div
-                class="absolute top-10 inset-x-4 flex items-center justify-between rounded-2xl bg-black/40 backdrop-blur px-3 py-2 text-[11px] text-white/90"
-              >
-                <span class="flex items-center gap-1.5">
-                  <span class="h-2 w-2 rounded-full bg-red-500 animate-pulse"></span> Recording
-                </span>
-                <span class="font-mono">02:14:37</span>
-              </div>
-
-              <!-- stats card -->
-              <div
-                class="absolute bottom-4 inset-x-4 rounded-2xl bg-white/95 backdrop-blur px-4 py-3 shadow-xl"
-              >
-                <div class="flex items-center justify-between">
-                  <div>
-                    <div class="text-[10px] uppercase tracking-wider text-ink/50">Today's hunt</div>
-                    <div class="mt-0.5 text-lg font-extrabold text-ink">4.8 km · 12 finds</div>
-                  </div>
-                  <button
-                    class="flex items-center justify-center h-10 w-10 rounded-full bg-brand-500 text-white shadow-glow"
-                    aria-label="Add find"
-                  >
-                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
-                    </svg>
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
-          <!-- floating badge -->
+          <!-- floating badges -->
           <div
-            class="absolute -left-6 top-24 rotate-[-6deg] rounded-2xl bg-white px-3 py-2 shadow-xl text-ink text-xs font-semibold"
+            class="hidden sm:block absolute -left-6 top-24 rotate-[-6deg] rounded-2xl bg-white px-3 py-2 shadow-xl text-ink text-xs font-semibold"
           >
-            🍄 +1 Boletus
-            <div class="text-[10px] font-normal text-ink/50">52.27°N, 104.32°E</div>
+            +1 Boletus
+            <div class="text-[10px] font-normal text-ink/50">Found near Apple Campus</div>
           </div>
           <div
-            class="absolute -right-4 bottom-32 rotate-[5deg] rounded-2xl bg-brand-500 px-3 py-2 shadow-xl text-white text-xs font-semibold"
+            class="hidden sm:block absolute -right-4 bottom-32 rotate-[5deg] rounded-2xl bg-brand-500 px-3 py-2 shadow-xl text-white text-xs font-semibold"
           >
-            Route saved
+            Recording route
           </div>
         </div>
       </div>
@@ -485,10 +406,10 @@
                 <path d="M4 7l8 4 8-4M12 11v10"/>
               </svg>
             </div>
-            <h3 class="mt-5 text-xl font-bold">Polygon zones</h3>
+            <h3 class="mt-5 text-xl font-bold">Polygon zones &amp; heatmap</h3>
             <p class="mt-2 text-ink/60 leading-relaxed">
-              Draw your secret spots right on the map, name them, and return next season with the
-              boundaries still on screen.
+              Draw your secret spots right on the map, name them, and let the per-zone heatmap show where
+              the good clusters really are.
             </p>
           </div>
 
@@ -576,6 +497,131 @@
             </p>
           </li>
         </ol>
+      </div>
+    </section>
+
+    <!-- ================== SCREENSHOTS ================== -->
+    <section id="screens" class="py-24 lg:py-32 bg-white">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl reveal">
+          <div class="text-sm font-semibold uppercase tracking-widest text-brand-600">The app</div>
+          <h2 class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
+            See it in the forest —
+            <span class="serif-italic text-brand-600">on a real iPhone.</span>
+          </h2>
+          <p class="mt-5 text-lg text-ink/60">
+            Every screen below is a real screenshot from the shipping app. No renders, no mockups.
+          </p>
+        </div>
+
+        <div class="mt-16 grid md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-6">
+          <!-- Screen 1: active hunt -->
+          <figure class="reveal flex flex-col items-center">
+            <div class="relative w-full max-w-[240px] aspect-[9/19.5] rounded-[2.2rem] border-[8px] border-ink bg-black shadow-card">
+              <div class="absolute inset-[1px] rounded-[1.7rem] overflow-hidden bg-white">
+                <img
+                  src="./assets/images/active-hunt.png"
+                  alt="Active hunt screen with live GPS trail"
+                  class="absolute inset-0 h-full w-full object-cover"
+                />
+              </div>
+            </div>
+            <figcaption class="mt-6 text-center">
+              <div class="font-bold text-lg">Live route</div>
+              <div class="mt-1 text-sm text-ink/60 max-w-[240px]">
+                Background GPS draws your trail while you walk. One tap per find.
+              </div>
+            </figcaption>
+          </figure>
+
+          <!-- Screen 2: hunts list -->
+          <figure class="reveal flex flex-col items-center">
+            <div class="relative w-full max-w-[240px] aspect-[9/19.5] rounded-[2.2rem] border-[8px] border-ink bg-black shadow-card">
+              <div class="absolute inset-[1px] rounded-[1.7rem] overflow-hidden bg-white">
+                <img
+                  src="./assets/images/hunts.png"
+                  alt="Hunts history list grouped by month"
+                  class="absolute inset-0 h-full w-full object-cover"
+                />
+              </div>
+            </div>
+            <figcaption class="mt-6 text-center">
+              <div class="font-bold text-lg">Hunts history</div>
+              <div class="mt-1 text-sm text-ink/60 max-w-[240px]">
+                Every trip grouped by month — date, duration, distance and finds.
+              </div>
+            </figcaption>
+          </figure>
+
+          <!-- Screen 3: hunt detail -->
+          <figure class="reveal flex flex-col items-center">
+            <div class="relative w-full max-w-[240px] aspect-[9/19.5] rounded-[2.2rem] border-[8px] border-ink bg-black shadow-card">
+              <div class="absolute inset-[1px] rounded-[1.7rem] overflow-hidden bg-white">
+                <img
+                  src="./assets/images/hunt.png"
+                  alt="Finished hunt detail with pins and species breakdown"
+                  class="absolute inset-0 h-full w-full object-cover"
+                />
+              </div>
+            </div>
+            <figcaption class="mt-6 text-center">
+              <div class="font-bold text-lg">Hunt detail</div>
+              <div class="mt-1 text-sm text-ink/60 max-w-[240px]">
+                Replay the path, filter by species, and see what each stop yielded.
+              </div>
+            </figcaption>
+          </figure>
+
+          <!-- Screen 4: polygon / heatmap -->
+          <figure class="reveal flex flex-col items-center">
+            <div class="relative w-full max-w-[240px] aspect-[9/19.5] rounded-[2.2rem] border-[8px] border-ink bg-black shadow-card">
+              <div class="absolute inset-[1px] rounded-[1.7rem] overflow-hidden bg-white">
+                <img
+                  src="./assets/images/polygon.png"
+                  alt="Polygon zone with species heatmap"
+                  class="absolute inset-0 h-full w-full object-cover"
+                />
+              </div>
+            </div>
+            <figcaption class="mt-6 text-center">
+              <div class="font-bold text-lg">Zones &amp; heatmap</div>
+              <div class="mt-1 text-sm text-ink/60 max-w-[240px]">
+                Draw your forest, name it, and watch the heatmap learn where the good spots are.
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+
+        <!-- Share card callout -->
+        <div class="mt-20 reveal grid lg:grid-cols-2 gap-10 items-center rounded-[2rem] bg-gradient-to-br from-brand-50 to-cream p-8 lg:p-12 border border-ink/5">
+          <div>
+            <div class="text-sm font-semibold uppercase tracking-widest text-brand-600">Share</div>
+            <h3 class="mt-3 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
+              One tap, one image,
+              <span class="serif-italic text-brand-600">whole story.</span>
+            </h3>
+            <p class="mt-4 text-ink/60 leading-relaxed">
+              Turn any finished hunt into a clean share card — route, distance, average speed, duration
+              and every mushroom you pinned. Post it, send it to a friend, or keep it as a season souvenir.
+            </p>
+            <ul class="mt-6 space-y-2 text-ink/80 text-sm">
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Distance &amp; avg. speed</li>
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Total duration &amp; find count</li>
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Species summary</li>
+            </ul>
+          </div>
+          <div class="flex justify-center">
+            <div class="relative w-full max-w-[280px] aspect-[9/19.5] rounded-[2.5rem] border-[9px] border-ink bg-black shadow-card">
+              <div class="absolute inset-[1px] rounded-[2rem] overflow-hidden bg-white">
+                <img
+                  src="./assets/images/share.png"
+                  alt="Share card with hunt statistics"
+                  class="absolute inset-0 h-full w-full object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -817,10 +863,11 @@
     <footer class="bg-night text-white/70 py-12">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-8 md:items-center md:justify-between">
         <div class="flex items-center gap-3">
-          <svg class="h-7 w-7" viewBox="0 0 64 64" aria-hidden="true">
-            <path d="M8 32c0-11 9-20 24-20s24 9 24 20c0 3-2 5-5 5H13c-3 0-5-2-5-5z" fill="#34C759" />
-            <path d="M24 37h16v11c0 3-3 5-8 5s-8-2-8-5V37z" fill="#F5E6CA" />
-          </svg>
+          <img
+            src="./assets/images/icon.png"
+            alt="ShroomSeeker"
+            class="h-10 w-10 rounded-xl shadow-md"
+          />
           <div>
             <div class="font-bold text-white">ShroomSeeker</div>
             <div class="text-xs">© 2026 · com.gradooc.shroomseeker</div>
