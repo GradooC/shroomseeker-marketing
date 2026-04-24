@@ -1,0 +1,854 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>ShroomSeeker — Find more mushrooms. Remember every spot.</title>
+    <meta
+      name="description"
+      content="ShroomSeeker is the iOS companion for mushroom hunters. Track hiking routes, pin every find with GPS, draw search zones, sync with Apple Health, and build your own atlas of forest spots."
+    />
+    <link rel="canonical" href="https://shroomseeker.app/" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="ShroomSeeker — Find more mushrooms. Remember every spot." />
+    <meta
+      property="og:description"
+      content="Track hiking routes, pin every find with GPS, draw search zones, and build your forest atlas. Built for iOS."
+    />
+    <meta property="og:image" content="./assets/og-image.png" />
+    <meta property="og:url" content="https://shroomseeker.app/" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brand: {
+                50: '#EEFBF2',
+                100: '#D6F5DF',
+                200: '#ADEBBF',
+                300: '#7FDB9A',
+                400: '#51C878',
+                500: '#34C759',
+                600: '#22A547',
+                700: '#1A8038',
+                800: '#145D2A',
+                900: '#0F421F',
+              },
+              ink: '#111827',
+              cream: '#FAFAF7',
+              night: '#0B0F0D',
+            },
+            fontFamily: {
+              sans: ['Inter', 'ui-sans-serif', 'system-ui'],
+              serif: ['"Instrument Serif"', 'ui-serif', 'Georgia'],
+            },
+            boxShadow: {
+              glow: '0 20px 80px -20px rgba(52,199,89,0.45)',
+              card: '0 10px 40px -10px rgba(17,24,39,0.12)',
+            },
+            animation: {
+              'float-slow': 'float 14s ease-in-out infinite',
+              'float-slower': 'float 22s ease-in-out infinite',
+              'fade-up': 'fade-up 0.8s ease-out both',
+              pulse: 'pulse-dot 2.4s ease-in-out infinite',
+            },
+            keyframes: {
+              float: {
+                '0%,100%': { transform: 'translate(0,0)' },
+                '50%': { transform: 'translate(10px,-18px)' },
+              },
+              'fade-up': {
+                '0%': { opacity: 0, transform: 'translateY(20px)' },
+                '100%': { opacity: 1, transform: 'translateY(0)' },
+              },
+              'pulse-dot': {
+                '0%,100%': { transform: 'scale(1)', opacity: 0.9 },
+                '50%': { transform: 'scale(1.25)', opacity: 0.4 },
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+        background: #fafaf7;
+        color: #111827;
+        -webkit-font-smoothing: antialiased;
+      }
+      .serif-italic {
+        font-family: 'Instrument Serif', serif;
+        font-style: italic;
+        font-weight: 400;
+      }
+
+      /* Topographic map pattern for phone mock */
+      .topo {
+        background-color: #0e1a13;
+        background-image:
+          radial-gradient(circle at 20% 30%, rgba(52, 199, 89, 0.18), transparent 45%),
+          radial-gradient(circle at 75% 65%, rgba(62, 180, 137, 0.22), transparent 40%),
+          repeating-radial-gradient(
+            circle at 50% 50%,
+            rgba(255, 255, 255, 0.05) 0,
+            rgba(255, 255, 255, 0.05) 1px,
+            transparent 1px,
+            transparent 16px
+          );
+      }
+      .trail {
+        stroke-dasharray: 6 6;
+        animation: dash 30s linear infinite;
+      }
+      @keyframes dash {
+        to {
+          stroke-dashoffset: -400;
+        }
+      }
+
+      /* reveal on scroll */
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+        transition:
+          opacity 0.8s ease-out,
+          transform 0.8s ease-out;
+      }
+      .reveal.in {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* gradient border for pro card */
+      .gradient-border {
+        position: relative;
+        background: #fff;
+        border-radius: 1.75rem;
+      }
+      .gradient-border::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        padding: 2px;
+        border-radius: inherit;
+        background: linear-gradient(135deg, #34c759, #3eb489, #90ee90);
+        -webkit-mask:
+          linear-gradient(#000 0 0) content-box,
+          linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        pointer-events: none;
+      }
+
+      details > summary {
+        list-style: none;
+        cursor: pointer;
+      }
+      details > summary::-webkit-details-marker {
+        display: none;
+      }
+      details[open] .faq-chev {
+        transform: rotate(45deg);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.001ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-cream text-ink overflow-x-hidden">
+    <!-- ================== NAV ================== -->
+    <header class="fixed top-0 inset-x-0 z-50">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <nav
+          class="mt-4 flex items-center justify-between rounded-2xl border border-white/10 bg-night/70 px-4 py-3 backdrop-blur-lg shadow-card"
+        >
+          <a href="#top" class="flex items-center gap-2 text-white">
+            <svg class="h-7 w-7" viewBox="0 0 64 64" aria-hidden="true">
+              <defs>
+                <linearGradient id="nav-cap" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0" stop-color="#51C878" />
+                  <stop offset="1" stop-color="#1A8038" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M8 32c0-11 9-20 24-20s24 9 24 20c0 3-2 5-5 5H13c-3 0-5-2-5-5z"
+                fill="url(#nav-cap)"
+              />
+              <circle cx="22" cy="26" r="3" fill="#fff" opacity=".85" />
+              <circle cx="40" cy="22" r="2.5" fill="#fff" opacity=".85" />
+              <path d="M24 37h16v11c0 3-3 5-8 5s-8-2-8-5V37z" fill="#F5E6CA" />
+            </svg>
+            <span class="font-bold tracking-tight">ShroomSeeker</span>
+          </a>
+          <div class="hidden md:flex items-center gap-8 text-sm text-white/80">
+            <a href="#features" class="hover:text-white transition">Features</a>
+            <a href="#how" class="hover:text-white transition">How it works</a>
+            <a href="#pricing" class="hover:text-white transition">Pricing</a>
+            <a href="#faq" class="hover:text-white transition">FAQ</a>
+          </div>
+          <a
+            href="#"
+            class="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-4 py-2 text-sm font-semibold text-white shadow-glow hover:bg-brand-400 transition"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M17.52 12.72c-.02-2.25 1.84-3.33 1.92-3.39-1.05-1.54-2.68-1.75-3.26-1.77-1.39-.14-2.71.82-3.42.82-.72 0-1.8-.8-2.96-.78-1.52.02-2.93.88-3.71 2.24-1.58 2.74-.4 6.79 1.14 9.02.75 1.1 1.64 2.32 2.8 2.28 1.13-.05 1.56-.73 2.93-.73 1.37 0 1.75.73 2.95.7 1.22-.02 1.99-1.11 2.73-2.21.86-1.27 1.21-2.5 1.23-2.56-.03-.01-2.36-.91-2.39-3.62zM15.29 5.9c.62-.76 1.04-1.8.92-2.85-.89.04-1.98.6-2.62 1.35-.57.67-1.08 1.74-.94 2.76.99.08 2.01-.5 2.64-1.26z"
+              />
+            </svg>
+            App Store
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- ================== HERO ================== -->
+    <section id="top" class="relative pt-32 pb-24 md:pt-40 md:pb-32 bg-night text-white overflow-hidden">
+      <!-- blur blobs -->
+      <div
+        aria-hidden="true"
+        class="absolute -top-20 -left-20 h-80 w-80 rounded-full bg-brand-500/40 blur-3xl animate-float-slow"
+      ></div>
+      <div
+        aria-hidden="true"
+        class="absolute top-40 -right-20 h-96 w-96 rounded-full bg-emerald-400/30 blur-3xl animate-float-slower"
+      ></div>
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(52,199,89,0.12),transparent_60%)]"
+      ></div>
+
+      <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+        <div class="reveal">
+          <span
+            class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-medium text-white/80 backdrop-blur"
+          >
+            <span class="h-1.5 w-1.5 rounded-full bg-brand-400 animate-pulse"></span>
+            Now available on iOS
+          </span>
+          <h1 class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05]">
+            Find more mushrooms.
+            <br />
+            <span class="serif-italic text-brand-300">Remember</span> every spot.
+          </h1>
+          <p class="mt-6 max-w-xl text-lg text-white/75 leading-relaxed">
+            ShroomSeeker turns your phone into a forest log-book. Record hiking routes in the background,
+            drop a pin the moment you spot a boletus, draw your favorite zones on the map, and watch your
+            personal atlas grow season after season.
+          </p>
+          <div class="mt-8 flex flex-wrap items-center gap-4">
+            <a
+              href="#"
+              class="inline-flex items-center gap-3 rounded-xl bg-white px-5 py-3 text-ink font-semibold hover:bg-brand-100 transition shadow-lg"
+            >
+              <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M17.52 12.72c-.02-2.25 1.84-3.33 1.92-3.39-1.05-1.54-2.68-1.75-3.26-1.77-1.39-.14-2.71.82-3.42.82-.72 0-1.8-.8-2.96-.78-1.52.02-2.93.88-3.71 2.24-1.58 2.74-.4 6.79 1.14 9.02.75 1.1 1.64 2.32 2.8 2.28 1.13-.05 1.56-.73 2.93-.73 1.37 0 1.75.73 2.95.7 1.22-.02 1.99-1.11 2.73-2.21.86-1.27 1.21-2.5 1.23-2.56-.03-.01-2.36-.91-2.39-3.62z"
+                />
+              </svg>
+              <div class="text-left leading-tight">
+                <div class="text-[10px] uppercase tracking-wider text-ink/60">Download on the</div>
+                <div class="text-base">App Store</div>
+              </div>
+            </a>
+            <a
+              href="#features"
+              class="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/5 px-5 py-3 font-semibold hover:bg-white/10 transition"
+            >
+              See features
+              <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path
+                  d="M5 10h10m0 0l-4-4m4 4l-4 4"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </a>
+          </div>
+          <div class="mt-10 flex items-center gap-6 text-xs text-white/50">
+            <span class="flex items-center gap-2">
+              <svg class="h-4 w-4 text-brand-400" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10 2a1 1 0 01.894.553l2.382 4.827 5.33.775a1 1 0 01.554 1.706l-3.857 3.759.91 5.309a1 1 0 01-1.451 1.054L10 17.517l-4.762 2.466a1 1 0 01-1.45-1.054l.91-5.309L.84 9.861A1 1 0 011.394 8.155l5.33-.775L9.106 2.553A1 1 0 0110 2z" />
+              </svg>
+              Built for iOS 17+
+            </span>
+            <span>· Apple HealthKit</span>
+            <span>· Offline-ready</span>
+            <span class="hidden sm:inline">· Background GPS</span>
+          </div>
+        </div>
+
+        <!-- Phone mockup -->
+        <div class="reveal relative mx-auto w-[300px] sm:w-[340px] lg:w-[360px]">
+          <div
+            class="relative aspect-[9/19.5] rounded-[3rem] border-[10px] border-ink bg-black shadow-[0_40px_100px_-20px_rgba(52,199,89,0.45)]"
+          >
+            <!-- notch -->
+            <div
+              class="absolute left-1/2 top-2 -translate-x-1/2 h-6 w-28 rounded-full bg-black z-20"
+            ></div>
+            <!-- map -->
+            <div class="absolute inset-[2px] rounded-[2.4rem] overflow-hidden topo">
+              <!-- trail -->
+              <svg class="absolute inset-0 w-full h-full" viewBox="0 0 300 620" preserveAspectRatio="none">
+                <path
+                  class="trail"
+                  d="M40 560 C 80 480, 60 420, 140 380 S 240 300, 200 220 S 80 160, 140 80"
+                  fill="none"
+                  stroke="#34C759"
+                  stroke-width="4"
+                  stroke-linecap="round"
+                  opacity="0.9"
+                />
+                <!-- polygon zone -->
+                <path
+                  d="M170 170 L 250 200 L 260 280 L 200 300 L 150 240 Z"
+                  fill="rgba(52,199,89,0.18)"
+                  stroke="#34C759"
+                  stroke-width="1.5"
+                  stroke-dasharray="4 4"
+                />
+              </svg>
+              <!-- mushroom pins -->
+              <img
+                src="./assets/markers/marker-boletus.png"
+                alt=""
+                class="absolute left-[22%] top-[66%] w-10 drop-shadow-lg"
+              />
+              <img
+                src="./assets/markers/marker-chanterelle.png"
+                alt=""
+                class="absolute left-[55%] top-[54%] w-9 drop-shadow-lg"
+              />
+              <img
+                src="./assets/markers/marker-morel.png"
+                alt=""
+                class="absolute left-[42%] top-[28%] w-9 drop-shadow-lg"
+              />
+              <img
+                src="./assets/markers/marker-red-cap-boletus.png"
+                alt=""
+                class="absolute left-[68%] top-[38%] w-9 drop-shadow-lg"
+              />
+
+              <!-- top HUD -->
+              <div
+                class="absolute top-10 inset-x-4 flex items-center justify-between rounded-2xl bg-black/40 backdrop-blur px-3 py-2 text-[11px] text-white/90"
+              >
+                <span class="flex items-center gap-1.5">
+                  <span class="h-2 w-2 rounded-full bg-red-500 animate-pulse"></span> Recording
+                </span>
+                <span class="font-mono">02:14:37</span>
+              </div>
+
+              <!-- stats card -->
+              <div
+                class="absolute bottom-4 inset-x-4 rounded-2xl bg-white/95 backdrop-blur px-4 py-3 shadow-xl"
+              >
+                <div class="flex items-center justify-between">
+                  <div>
+                    <div class="text-[10px] uppercase tracking-wider text-ink/50">Today's hunt</div>
+                    <div class="mt-0.5 text-lg font-extrabold text-ink">4.8 km · 12 finds</div>
+                  </div>
+                  <button
+                    class="flex items-center justify-center h-10 w-10 rounded-full bg-brand-500 text-white shadow-glow"
+                    aria-label="Add find"
+                  >
+                    <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- floating badge -->
+          <div
+            class="absolute -left-6 top-24 rotate-[-6deg] rounded-2xl bg-white px-3 py-2 shadow-xl text-ink text-xs font-semibold"
+          >
+            🍄 +1 Boletus
+            <div class="text-[10px] font-normal text-ink/50">52.27°N, 104.32°E</div>
+          </div>
+          <div
+            class="absolute -right-4 bottom-32 rotate-[5deg] rounded-2xl bg-brand-500 px-3 py-2 shadow-xl text-white text-xs font-semibold"
+          >
+            Route saved
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================== TRUST ROW ================== -->
+    <section class="border-b border-ink/5 bg-white">
+      <div
+        class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center"
+      >
+        <div class="reveal">
+          <div class="text-2xl font-extrabold text-ink">iOS 17+</div>
+          <div class="text-xs text-ink/50 mt-1 uppercase tracking-wider">Native build</div>
+        </div>
+        <div class="reveal">
+          <div class="text-2xl font-extrabold text-ink">Background</div>
+          <div class="text-xs text-ink/50 mt-1 uppercase tracking-wider">GPS tracking</div>
+        </div>
+        <div class="reveal">
+          <div class="text-2xl font-extrabold text-ink">Apple Health</div>
+          <div class="text-xs text-ink/50 mt-1 uppercase tracking-wider">Workouts sync</div>
+        </div>
+        <div class="reveal">
+          <div class="text-2xl font-extrabold text-ink">Offline-first</div>
+          <div class="text-xs text-ink/50 mt-1 uppercase tracking-wider">Your data, local</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================== FEATURES ================== -->
+    <section id="features" class="py-24 lg:py-32">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl reveal">
+          <div class="text-sm font-semibold uppercase tracking-widest text-brand-600">Features</div>
+          <h2 class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
+            Everything a forager needs,
+            <span class="serif-italic text-brand-600">nothing they don't.</span>
+          </h2>
+          <p class="mt-5 text-lg text-ink/60">
+            Designed for the rhythm of the hunt — boots on, phone in pocket, hands full of mushrooms.
+          </p>
+        </div>
+
+        <div class="mt-16 grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- card -->
+          <div
+            class="reveal group rounded-3xl bg-white p-7 shadow-card hover:-translate-y-1 transition border border-ink/5"
+          >
+            <div
+              class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600"
+            >
+              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke-linecap="round"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </div>
+            <h3 class="mt-5 text-xl font-bold">Route tracking</h3>
+            <p class="mt-2 text-ink/60 leading-relaxed">
+              Hit record and forget it. Background GPS writes your path to local SQLite with
+              battery-friendly sampling.
+            </p>
+          </div>
+
+          <div class="reveal group rounded-3xl bg-white p-7 shadow-card hover:-translate-y-1 transition border border-ink/5">
+            <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
+              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 21s-7-5.2-7-11a7 7 0 1114 0c0 5.8-7 11-7 11z" stroke-linejoin="round"/>
+                <circle cx="12" cy="10" r="2.5"/>
+              </svg>
+            </div>
+            <h3 class="mt-5 text-xl font-bold">Find logging</h3>
+            <p class="mt-2 text-ink/60 leading-relaxed">
+              A gesture-based counter that adds 10 finds as fast as you can pick them. Each one carries
+              GPS, species, and a timestamp.
+            </p>
+          </div>
+
+          <div class="reveal group rounded-3xl bg-white p-7 shadow-card hover:-translate-y-1 transition border border-ink/5">
+            <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
+              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M4 7l8-4 8 4v10l-8 4-8-4V7z" stroke-linejoin="round"/>
+                <path d="M4 7l8 4 8-4M12 11v10"/>
+              </svg>
+            </div>
+            <h3 class="mt-5 text-xl font-bold">Polygon zones</h3>
+            <p class="mt-2 text-ink/60 leading-relaxed">
+              Draw your secret spots right on the map, name them, and return next season with the
+              boundaries still on screen.
+            </p>
+          </div>
+
+          <div class="reveal group rounded-3xl bg-white p-7 shadow-card hover:-translate-y-1 transition border border-ink/5">
+            <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
+              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 18a4 4 0 010-8 6 6 0 0111.7-1.5A4.5 4.5 0 0118 18H6z" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="mt-5 text-xl font-bold">Weather per zone</h3>
+            <p class="mt-2 text-ink/60 leading-relaxed">
+              Know when the rains have done their work. Each saved zone gets its own weather chart so you
+              can time the trip right.
+            </p>
+          </div>
+
+          <div class="reveal group rounded-3xl bg-white p-7 shadow-card hover:-translate-y-1 transition border border-ink/5">
+            <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
+              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                <rect x="14" y="3" width="7" height="4" rx="1.5"/>
+                <rect x="14" y="11" width="7" height="10" rx="1.5"/>
+                <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+              </svg>
+            </div>
+            <h3 class="mt-5 text-xl font-bold">Activity heatmap</h3>
+            <p class="mt-2 text-ink/60 leading-relaxed">
+              A season-long view of every trip and every find. Spot the patterns in your own data.
+            </p>
+          </div>
+
+          <div class="reveal group rounded-3xl bg-white p-7 shadow-card hover:-translate-y-1 transition border border-ink/5">
+            <div class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600">
+              <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 21s-7-4.5-7-11a5 5 0 019.5-2A5 5 0 0119 10c0 6.5-7 11-7 11z" stroke-linejoin="round"/>
+                <path d="M9 11l1.8 1.8L15 9" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3 class="mt-5 text-xl font-bold">Apple Health sync</h3>
+            <p class="mt-2 text-ink/60 leading-relaxed">
+              Your hikes show up next to your workouts — distance, elevation, calories — without lifting
+              a finger.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================== HOW IT WORKS ================== -->
+    <section id="how" class="py-24 lg:py-32 bg-ink text-white relative overflow-hidden">
+      <div
+        aria-hidden="true"
+        class="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(52,199,89,0.2),transparent_60%)]"
+      ></div>
+      <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="max-w-2xl reveal">
+          <div class="text-sm font-semibold uppercase tracking-widest text-brand-400">How it works</div>
+          <h2 class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
+            Three taps between you and <span class="serif-italic text-brand-300">a better harvest.</span>
+          </h2>
+        </div>
+
+        <ol class="mt-16 grid md:grid-cols-3 gap-8">
+          <li class="reveal rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur">
+            <div class="text-5xl font-serif-italic serif-italic text-brand-300">01</div>
+            <h3 class="mt-4 text-xl font-bold">Start a route</h3>
+            <p class="mt-2 text-white/60 leading-relaxed">
+              Open the map, tap Record. That's the last decision you need to make before the forest.
+            </p>
+          </li>
+          <li class="reveal rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur">
+            <div class="text-5xl serif-italic text-brand-300">02</div>
+            <h3 class="mt-4 text-xl font-bold">Pin your finds</h3>
+            <p class="mt-2 text-white/60 leading-relaxed">
+              One tap per mushroom, swipe to change species. No typing, no fiddling — the forest doesn't
+              wait.
+            </p>
+          </li>
+          <li class="reveal rounded-3xl border border-white/10 bg-white/5 p-8 backdrop-blur">
+            <div class="text-5xl serif-italic text-brand-300">03</div>
+            <h3 class="mt-4 text-xl font-bold">Save &amp; revisit</h3>
+            <p class="mt-2 text-white/60 leading-relaxed">
+              Stop the route, give it a name, draw a zone around the sweet spot. Future-you will thank
+              you.
+            </p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ================== SPECIES ================== -->
+    <section class="py-24 lg:py-32">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 reveal">
+          <div class="max-w-2xl">
+            <div class="text-sm font-semibold uppercase tracking-widest text-brand-600">Species</div>
+            <h2 class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
+              Five icons. <span class="serif-italic text-brand-600">One tap each.</span>
+            </h2>
+            <p class="mt-5 text-lg text-ink/60">
+              Filter your map by species, and let the heatmap show you which forests give up which
+              mushrooms.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-16 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-6">
+          <!-- species card -->
+          <div class="reveal rounded-3xl bg-gradient-to-br from-brand-50 to-white p-6 text-center border border-ink/5 shadow-card">
+            <img src="./assets/markers/marker-boletus.png" alt="Boletus" class="mx-auto h-20 w-20 object-contain" />
+            <div class="mt-4 font-bold">Boletus</div>
+            <div class="text-xs text-ink/50">Porcini</div>
+          </div>
+          <div class="reveal rounded-3xl bg-gradient-to-br from-brand-50 to-white p-6 text-center border border-ink/5 shadow-card">
+            <img src="./assets/markers/marker-brown-cap-boletus.png" alt="Brown Cap Boletus" class="mx-auto h-20 w-20 object-contain" />
+            <div class="mt-4 font-bold">Brown Cap</div>
+            <div class="text-xs text-ink/50">Leccinum scabrum</div>
+          </div>
+          <div class="reveal rounded-3xl bg-gradient-to-br from-brand-50 to-white p-6 text-center border border-ink/5 shadow-card">
+            <img src="./assets/markers/marker-red-cap-boletus.png" alt="Red Cap Boletus" class="mx-auto h-20 w-20 object-contain" />
+            <div class="mt-4 font-bold">Red Cap</div>
+            <div class="text-xs text-ink/50">Leccinum aurantiacum</div>
+          </div>
+          <div class="reveal rounded-3xl bg-gradient-to-br from-brand-50 to-white p-6 text-center border border-ink/5 shadow-card">
+            <img src="./assets/markers/marker-chanterelle.png" alt="Chanterelle" class="mx-auto h-20 w-20 object-contain" />
+            <div class="mt-4 font-bold">Chanterelle</div>
+            <div class="text-xs text-ink/50">Cantharellus</div>
+          </div>
+          <div class="reveal rounded-3xl bg-gradient-to-br from-brand-50 to-white p-6 text-center border border-ink/5 shadow-card">
+            <img src="./assets/markers/marker-morel.png" alt="Morel" class="mx-auto h-20 w-20 object-contain" />
+            <div class="mt-4 font-bold">Morel</div>
+            <div class="text-xs text-ink/50">Morchella</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================== PRICING ================== -->
+    <section id="pricing" class="py-24 lg:py-32 bg-white">
+      <div class="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto reveal">
+          <div class="text-sm font-semibold uppercase tracking-widest text-brand-600">Pricing</div>
+          <h2 class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
+            Free to start. <span class="serif-italic text-brand-600">Cheap to love.</span>
+          </h2>
+          <p class="mt-5 text-lg text-ink/60">
+            Try every feature for the first few trips. Upgrade when the forest becomes a habit.
+          </p>
+        </div>
+
+        <div class="mt-16 grid md:grid-cols-2 gap-6">
+          <!-- Free -->
+          <div class="reveal rounded-3xl border border-ink/10 bg-cream p-8">
+            <div class="text-sm font-semibold text-ink/60 uppercase tracking-wider">Free</div>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span class="text-5xl font-extrabold">$0</span>
+              <span class="text-ink/50">/ forever</span>
+            </div>
+            <p class="mt-3 text-ink/60">Enough to see if ShroomSeeker belongs on your home screen.</p>
+            <ul class="mt-8 space-y-3 text-ink/80">
+              <li class="flex items-start gap-3">
+                <svg class="h-5 w-5 text-brand-500 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>
+                Route tracking with GPS
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="h-5 w-5 text-brand-500 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>
+                Find logging, all 5 species
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="h-5 w-5 text-brand-500 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>
+                Limited saved routes &amp; zones
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="h-5 w-5 text-brand-500 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>
+                Apple Health sync
+              </li>
+            </ul>
+            <a href="#" class="mt-10 block text-center rounded-xl border border-ink/15 px-5 py-3 font-semibold hover:bg-ink hover:text-white transition">
+              Get the app
+            </a>
+          </div>
+
+          <!-- Pro -->
+          <div class="reveal gradient-border p-8 relative">
+            <span class="absolute -top-3 right-6 rounded-full bg-brand-500 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white shadow-glow">
+              Save 90%
+            </span>
+            <div class="text-sm font-semibold text-brand-600 uppercase tracking-wider">Pro</div>
+            <div class="mt-3 flex items-baseline gap-2">
+              <span class="text-5xl font-extrabold">$3.99</span>
+              <span class="text-ink/50">/ month</span>
+            </div>
+            <div class="mt-1 text-sm text-brand-700 font-semibold">or $50 / year — less than one mushroom knife</div>
+            <p class="mt-3 text-ink/60">Everything that makes a real season worth logging.</p>
+            <ul class="mt-8 space-y-3 text-ink/90">
+              <li class="flex items-start gap-3">
+                <svg class="h-5 w-5 text-brand-500 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>
+                <b>Unlimited</b> routes, finds &amp; zones
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="h-5 w-5 text-brand-500 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>
+                Advanced map tools &amp; heatmap
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="h-5 w-5 text-brand-500 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>
+                Per-zone weather history
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="h-5 w-5 text-brand-500 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>
+                Early access to new features
+              </li>
+              <li class="flex items-start gap-3">
+                <svg class="h-5 w-5 text-brand-500 mt-0.5 shrink-0" viewBox="0 0 20 20" fill="currentColor"><path d="M16.7 5.3a1 1 0 010 1.4l-8 8a1 1 0 01-1.4 0l-4-4a1 1 0 011.4-1.4L8 12.6l7.3-7.3a1 1 0 011.4 0z"/></svg>
+                Priority support
+              </li>
+            </ul>
+            <a href="#" class="mt-10 block text-center rounded-xl bg-brand-500 px-5 py-3 font-semibold text-white hover:bg-brand-400 transition shadow-glow">
+              Go Pro
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================== FAQ ================== -->
+    <section id="faq" class="py-24 lg:py-32">
+      <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+        <div class="text-center reveal">
+          <div class="text-sm font-semibold uppercase tracking-widest text-brand-600">FAQ</div>
+          <h2 class="mt-3 text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight">
+            Things people ask.
+          </h2>
+        </div>
+
+        <div class="mt-12 space-y-4">
+          <details class="reveal group rounded-2xl bg-white border border-ink/10 p-6 open:shadow-card">
+            <summary class="flex items-center justify-between gap-4 font-semibold text-lg">
+              Is ShroomSeeker available on Android?
+              <span class="faq-chev text-brand-500 text-2xl leading-none transition-transform">+</span>
+            </summary>
+            <p class="mt-3 text-ink/60 leading-relaxed">
+              Not yet. The first release is iOS-only because of deep integration with Apple HealthKit and
+              background location. Android is on the roadmap — leave your email below to hear first.
+            </p>
+          </details>
+          <details class="reveal group rounded-2xl bg-white border border-ink/10 p-6 open:shadow-card">
+            <summary class="flex items-center justify-between gap-4 font-semibold text-lg">
+              Does it work without signal in the forest?
+              <span class="faq-chev text-brand-500 text-2xl leading-none transition-transform">+</span>
+            </summary>
+            <p class="mt-3 text-ink/60 leading-relaxed">
+              Yes. Routes, finds and polygons live in a local SQLite database on your device. You can
+              track, pin and draw all day without a single bar of signal.
+            </p>
+          </details>
+          <details class="reveal group rounded-2xl bg-white border border-ink/10 p-6 open:shadow-card">
+            <summary class="flex items-center justify-between gap-4 font-semibold text-lg">
+              Where does my data live? Who sees my spots?
+              <span class="faq-chev text-brand-500 text-2xl leading-none transition-transform">+</span>
+            </summary>
+            <p class="mt-3 text-ink/60 leading-relaxed">
+              Your routes, finds and zones stay on your device. Authentication uses Supabase, but your
+              hunting data isn't sold, shared, or indexed. Your secret spots stay yours.
+            </p>
+          </details>
+          <details class="reveal group rounded-2xl bg-white border border-ink/10 p-6 open:shadow-card">
+            <summary class="flex items-center justify-between gap-4 font-semibold text-lg">
+              Will tracking drain my battery?
+              <span class="faq-chev text-brand-500 text-2xl leading-none transition-transform">+</span>
+            </summary>
+            <p class="mt-3 text-ink/60 leading-relaxed">
+              GPS sampling is tuned for long walks, not fast drives — expect a full day of tracking on a
+              modern iPhone with room to spare.
+            </p>
+          </details>
+          <details class="reveal group rounded-2xl bg-white border border-ink/10 p-6 open:shadow-card">
+            <summary class="flex items-center justify-between gap-4 font-semibold text-lg">
+              Can I cancel Pro anytime?
+              <span class="faq-chev text-brand-500 text-2xl leading-none transition-transform">+</span>
+            </summary>
+            <p class="mt-3 text-ink/60 leading-relaxed">
+              Of course — straight from Apple Subscriptions. Your data and free-tier features stay intact.
+            </p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================== FINAL CTA ================== -->
+    <section class="pb-24 lg:pb-32">
+      <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+        <div
+          class="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-brand-500 via-brand-600 to-emerald-700 p-10 md:p-16 text-white shadow-glow reveal"
+        >
+          <div
+            aria-hidden="true"
+            class="absolute -top-20 -right-10 h-80 w-80 rounded-full bg-white/20 blur-3xl"
+          ></div>
+          <div class="relative max-w-2xl">
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
+              Your next hunt is <span class="serif-italic">waiting.</span>
+            </h2>
+            <p class="mt-4 text-white/85 text-lg">
+              Put ShroomSeeker in your pocket and let this season be the one you actually remember.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-4">
+              <a
+                href="#"
+                class="inline-flex items-center gap-3 rounded-xl bg-white px-5 py-3 text-ink font-semibold hover:bg-brand-100 transition shadow-lg"
+              >
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M17.52 12.72c-.02-2.25 1.84-3.33 1.92-3.39-1.05-1.54-2.68-1.75-3.26-1.77-1.39-.14-2.71.82-3.42.82-.72 0-1.8-.8-2.96-.78-1.52.02-2.93.88-3.71 2.24-1.58 2.74-.4 6.79 1.14 9.02.75 1.1 1.64 2.32 2.8 2.28 1.13-.05 1.56-.73 2.93-.73 1.37 0 1.75.73 2.95.7 1.22-.02 1.99-1.11 2.73-2.21.86-1.27 1.21-2.5 1.23-2.56-.03-.01-2.36-.91-2.39-3.62z" />
+                </svg>
+                <div class="text-left leading-tight">
+                  <div class="text-[10px] uppercase tracking-wider text-ink/60">Download on the</div>
+                  <div class="text-base">App Store</div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================== FOOTER ================== -->
+    <footer class="bg-night text-white/70 py-12">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row gap-8 md:items-center md:justify-between">
+        <div class="flex items-center gap-3">
+          <svg class="h-7 w-7" viewBox="0 0 64 64" aria-hidden="true">
+            <path d="M8 32c0-11 9-20 24-20s24 9 24 20c0 3-2 5-5 5H13c-3 0-5-2-5-5z" fill="#34C759" />
+            <path d="M24 37h16v11c0 3-3 5-8 5s-8-2-8-5V37z" fill="#F5E6CA" />
+          </svg>
+          <div>
+            <div class="font-bold text-white">ShroomSeeker</div>
+            <div class="text-xs">© 2026 · com.gradooc.shroomseeker</div>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-6 text-sm">
+          <a href="#" class="hover:text-white transition">Privacy</a>
+          <a href="#" class="hover:text-white transition">Terms</a>
+          <a href="#" class="hover:text-white transition">Support</a>
+          <a href="mailto:hello@shroomseeker.app" class="hover:text-white transition">hello@shroomseeker.app</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // reveal-on-scroll
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add('in');
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.12 }
+      );
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>
