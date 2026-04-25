@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="x-apple-disable-message-reformatting" />
+        <meta name="color-scheme" content="light dark" />
+        <meta name="supported-color-schemes" content="light dark" />
+        <title>Your ShroomSeeker code</title>
+        <style>
+            body,
+            table,
+            td,
+            a {
+                -webkit-text-size-adjust: 100%;
+                -ms-text-size-adjust: 100%;
+            }
+            table,
+            td {
+                mso-table-lspace: 0pt;
+                mso-table-rspace: 0pt;
+            }
+            img {
+                -ms-interpolation-mode: bicubic;
+                border: 0;
+                outline: none;
+                text-decoration: none;
+                display: block;
+            }
+            a {
+                text-decoration: none;
+            }
+            .otp-code {
+                font-family:
+                    'SF Mono', 'Menlo', 'Consolas', 'Roboto Mono', monospace;
+                letter-spacing: 14px;
+                font-size: 38px;
+                font-weight: 700;
+                color: #0f421f;
+            }
+            @media (max-width: 480px) {
+                .container {
+                    width: 100% !important;
+                }
+                .px-outer {
+                    padding-left: 20px !important;
+                    padding-right: 20px !important;
+                }
+                .px-inner {
+                    padding-left: 24px !important;
+                    padding-right: 24px !important;
+                }
+                .otp-code {
+                    font-size: 30px !important;
+                    letter-spacing: 10px !important;
+                }
+                .h1 {
+                    font-size: 24px !important;
+                }
+            }
+            @media (prefers-color-scheme: dark) {
+                .bg-page {
+                    background: #0b0f0d !important;
+                }
+                .bg-card {
+                    background: #11181a !important;
+                    border-color: #1f2a26 !important;
+                }
+                .text-ink {
+                    color: #f3f4f6 !important;
+                }
+                .text-muted {
+                    color: #9aa0a6 !important;
+                }
+                .otp-shell {
+                    background: #0f1f15 !important;
+                    border-color: #1a8038 !important;
+                }
+                .otp-code {
+                    color: #7fdb9a !important;
+                }
+                .divider {
+                    border-color: #1f2a26 !important;
+                }
+                .footer-text {
+                    color: #6b7280 !important;
+                }
+                .link-fallback {
+                    color: #7fdb9a !important;
+                }
+            }
+        </style>
+    </head>
+    <body
+        class="bg-page"
+        style="
+            margin: 0;
+            padding: 0;
+            background: #fafaf7;
+            font-family:
+                'Inter',
+                -apple-system,
+                BlinkMacSystemFont,
+                'Segoe UI',
+                Helvetica,
+                Arial,
+                sans-serif;
+        "
+    >
+        <div
+            style="
+                display: none;
+                max-height: 0;
+                overflow: hidden;
+                mso-hide: all;
+                font-size: 1px;
+                line-height: 1px;
+                color: #fafaf7;
+            "
+        >
+            Your one-time code is {{ .Token }}.
+        </div>
+
+        <table
+            role="presentation"
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            class="bg-page"
+            style="background: #fafaf7"
+        >
+            <tr>
+                <td align="center" class="px-outer" style="padding: 40px 24px">
+                    <table
+                        role="presentation"
+                        width="560"
+                        cellpadding="0"
+                        cellspacing="0"
+                        border="0"
+                        class="container"
+                        style="width: 560px; max-width: 560px"
+                    >
+                        <tr>
+                            <td align="center" style="padding: 8px 0 28px">
+                                <table
+                                    role="presentation"
+                                    cellpadding="0"
+                                    cellspacing="0"
+                                    border="0"
+                                >
+                                    <tr>
+                                        <td style="vertical-align: middle">
+                                            <img
+                                                src="https://shroomseeker.org/assets/images/icon.png"
+                                                width="44"
+                                                height="44"
+                                                alt="ShroomSeeker"
+                                                style="
+                                                    display: block;
+                                                    width: 44px;
+                                                    height: 44px;
+                                                    border-radius: 10px;
+                                                    border: 0;
+                                                    outline: none;
+                                                    text-decoration: none;
+                                                "
+                                            />
+                                        </td>
+                                        <td style="width: 12px"></td>
+                                        <td
+                                            class="text-ink"
+                                            style="
+                                                font-size: 20px;
+                                                font-weight: 700;
+                                                color: #111827;
+                                                letter-spacing: -0.01em;
+                                                vertical-align: middle;
+                                            "
+                                        >
+                                            ShroomSeeker
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td
+                                class="bg-card"
+                                style="
+                                    background: #ffffff;
+                                    border: 1px solid #eef0ec;
+                                    border-radius: 20px;
+                                    box-shadow: 0 10px 40px -10px
+                                        rgba(17, 24, 39, 0.08);
+                                "
+                            >
+                                <table
+                                    role="presentation"
+                                    width="100%"
+                                    cellpadding="0"
+                                    cellspacing="0"
+                                    border="0"
+                                >
+                                    <tr>
+                                        <td
+                                            class="px-inner"
+                                            style="padding: 40px 44px 8px"
+                                        >
+                                            <h1
+                                                class="h1 text-ink"
+                                                style="
+                                                    margin: 0 0 12px;
+                                                    font-family:
+                                                        'Instrument Serif',
+                                                        Georgia, serif;
+                                                    font-weight: 400;
+                                                    font-size: 30px;
+                                                    line-height: 1.15;
+                                                    color: #111827;
+                                                    letter-spacing: -0.01em;
+                                                "
+                                            >
+                                                Your sign-in code
+                                            </h1>
+                                            <p
+                                                class="text-muted"
+                                                style="
+                                                    margin: 0 0 28px;
+                                                    font-size: 15px;
+                                                    line-height: 1.6;
+                                                    color: #4b5563;
+                                                "
+                                            >
+                                                Enter the code below to continue
+                                                signing in to
+                                                <strong style="color: #111827"
+                                                    >ShroomSeeker</strong
+                                                >.
+                                            </p>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td
+                                            class="px-inner"
+                                            style="padding: 0 44px"
+                                        >
+                                            <table
+                                                role="presentation"
+                                                width="100%"
+                                                cellpadding="0"
+                                                cellspacing="0"
+                                                border="0"
+                                            >
+                                                <tr>
+                                                    <td
+                                                        class="otp-shell"
+                                                        align="center"
+                                                        style="
+                                                            background: #eefbf2;
+                                                            border: 1px solid
+                                                                #adebbf;
+                                                            border-radius: 14px;
+                                                            padding: 22px 16px;
+                                                        "
+                                                    >
+                                                        <div class="otp-code">
+                                                            {{ .Token }}
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td
+                                            class="px-inner"
+                                            style="padding: 20px 44px 8px"
+                                        >
+                                            <p
+                                                class="text-muted"
+                                                style="
+                                                    margin: 0;
+                                                    font-size: 14px;
+                                                    line-height: 1.6;
+                                                    color: #6b7280;
+                                                "
+                                            >
+                                                If you didn&rsquo;t request this
+                                                code, you can safely ignore this
+                                                email &mdash; someone may have
+                                                typed your address by mistake.
+                                                Your account stays secure as
+                                                long as you don&rsquo;t share
+                                                the code.
+                                            </p>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td
+                                            class="px-inner"
+                                            style="padding: 28px 44px 0"
+                                        >
+                                            <div
+                                                class="divider"
+                                                style="
+                                                    border-top: 1px solid
+                                                        #eef0ec;
+                                                "
+                                            ></div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td
+                                            class="px-inner"
+                                            style="padding: 20px 44px 36px"
+                                        >
+                                            <p
+                                                class="text-muted"
+                                                style="
+                                                    margin: 0;
+                                                    font-size: 12px;
+                                                    line-height: 1.6;
+                                                    color: #9ca3af;
+                                                "
+                                            >
+                                                Sent to {{ .Email }}
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td align="center" style="padding: 28px 16px 8px">
+                                <p
+                                    class="footer-text"
+                                    style="
+                                        margin: 0 0 6px;
+                                        font-size: 12px;
+                                        line-height: 1.6;
+                                        color: #9ca3af;
+                                    "
+                                >
+                                    ShroomSeeker &middot; Find more mushrooms.
+                                    Remember every spot.
+                                </p>
+                                <p
+                                    class="footer-text"
+                                    style="
+                                        margin: 0;
+                                        font-size: 12px;
+                                        line-height: 1.6;
+                                        color: #9ca3af;
+                                    "
+                                >
+                                    <a
+                                        href="https://shroomseeker.org"
+                                        style="
+                                            color: #22a547;
+                                            text-decoration: none;
+                                        "
+                                        >shroomseeker.org</a
+                                    >
+                                    &middot;
+                                    <a
+                                        href="https://shroomseeker.org/privacy"
+                                        style="
+                                            color: #22a547;
+                                            text-decoration: none;
+                                        "
+                                        >Privacy</a
+                                    >
+                                    &middot;
+                                    <a
+                                        href="https://shroomseeker.org/support"
+                                        style="
+                                            color: #22a547;
+                                            text-decoration: none;
+                                        "
+                                        >Support</a
+                                    >
+                                </p>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
