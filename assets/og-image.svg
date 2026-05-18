@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     viewBox="0 0 1200 630" width="1200" height="630" font-family="Inter, ui-sans-serif, system-ui, -apple-system, sans-serif">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;700;800;900&amp;family=Instrument+Serif:ital@1&amp;display=swap');
+    </style>
+    <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#34C759" stop-opacity="0.45"/>
+      <stop offset="60%" stop-color="#34C759" stop-opacity="0.08"/>
+      <stop offset="100%" stop-color="#34C759" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glow2" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3EB489" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#3EB489" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="topo" x="0" y="0" width="100%" height="100%" patternUnits="userSpaceOnUse">
+      <g fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1">
+        <circle cx="600" cy="315" r="60"/>
+        <circle cx="600" cy="315" r="120"/>
+        <circle cx="600" cy="315" r="180"/>
+        <circle cx="600" cy="315" r="240"/>
+        <circle cx="600" cy="315" r="300"/>
+        <circle cx="600" cy="315" r="360"/>
+        <circle cx="600" cy="315" r="420"/>
+        <circle cx="600" cy="315" r="480"/>
+      </g>
+    </pattern>
+    <clipPath id="phoneScreen">
+      <rect x="0" y="0" width="259" height="560" rx="34"/>
+    </clipPath>
+    <clipPath id="iconClip">
+      <rect x="0" y="0" width="56" height="56" rx="14"/>
+    </clipPath>
+    <filter id="phoneShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="20" stdDeviation="30" flood-color="#34C759" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0B0F0D"/>
+  <rect width="1200" height="630" fill="url(#topo)"/>
+  <circle cx="180" cy="160" r="380" fill="url(#glow1)"/>
+  <circle cx="1080" cy="540" r="340" fill="url(#glow2)"/>
+
+  <!-- Logo row -->
+  <g transform="translate(80, 80)">
+    <g clip-path="url(#iconClip)">
+      <image xlink:href="images/icon.png" width="56" height="56"/>
+    </g>
+    <text x="74" y="38" font-size="24" font-weight="800" fill="#ffffff" letter-spacing="-0.5">ShroomSeeker</text>
+  </g>
+
+  <!-- Headline -->
+  <g transform="translate(80, 220)" fill="#ffffff">
+    <text font-size="76" font-weight="900" letter-spacing="-2">
+      <tspan x="0" dy="0">Find more</tspan>
+      <tspan x="0" dy="84">mushrooms.</tspan>
+    </text>
+    <text x="0" y="248" font-size="64" font-family="'Instrument Serif', ui-serif, Georgia, serif" font-style="italic" fill="#7FDB9A" letter-spacing="-1">
+      Remember every spot.
+    </text>
+  </g>
+
+  <!-- Tagline / chips -->
+  <g transform="translate(80, 540)" font-size="16" font-weight="500" fill="rgba(255,255,255,0.75)">
+    <g>
+      <rect x="0" y="0" width="84" height="34" rx="17" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)"/>
+      <text x="42" y="22" text-anchor="middle">iOS 17+</text>
+    </g>
+    <g transform="translate(96, 0)">
+      <rect x="0" y="0" width="142" height="34" rx="17" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)"/>
+      <text x="71" y="22" text-anchor="middle">Background GPS</text>
+    </g>
+    <g transform="translate(250, 0)">
+      <rect x="0" y="0" width="138" height="34" rx="17" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)"/>
+      <text x="69" y="22" text-anchor="middle">Apple Health</text>
+    </g>
+    <g transform="translate(400, 0)">
+      <rect x="0" y="0" width="98" height="34" rx="17" fill="rgba(52,199,89,0.18)" stroke="rgba(52,199,89,0.35)"/>
+      <text x="49" y="22" text-anchor="middle" fill="#7FDB9A" font-weight="600">Free</text>
+    </g>
+  </g>
+
+  <!-- Phone -->
+  <g transform="translate(830, 35) rotate(-4 129.5 280)" filter="url(#phoneShadow)">
+    <rect x="-8" y="-8" width="275" height="576" rx="42" fill="#0B0F0D"/>
+    <rect x="0" y="0" width="259" height="560" rx="34" fill="#000"/>
+    <g clip-path="url(#phoneScreen)">
+      <image xlink:href="images/active-hunt.png" x="0" y="0" width="259" height="560"/>
+    </g>
+    <!-- notch -->
+    <rect x="89.5" y="14" width="80" height="20" rx="10" fill="#0B0F0D"/>
+  </g>
+
+  <!-- Domain mark bottom-right -->
+  <text x="1120" y="595" text-anchor="end" font-size="14" font-weight="600" fill="rgba(255,255,255,0.4)" letter-spacing="1">
+    shroomseeker.org
+  </text>
+</svg>
