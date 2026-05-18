@@ -6,22 +6,36 @@
     <title>ShroomSeeker — Find more mushrooms. Remember every spot.</title>
     <meta
       name="description"
-      content="ShroomSeeker is the iOS companion for mushroom hunters. Track hiking routes, pin every find with GPS, draw search zones, sync with Apple Health, and build your own atlas of forest spots."
+      content="ShroomSeeker is the iOS app for mushroom foragers. Track hiking routes with background GPS, pin every find, draw forest zones, sync with Apple Health, and build your personal atlas of mushroom spots."
     />
-    <link rel="canonical" href="https://shroomseeker.app/" />
+    <meta name="keywords" content="mushroom hunting app, mushroom foraging, mushroom map, GPS mushroom tracker, foraging app iOS, boletus, chanterelle, morel, porcini, mushroom log, hiking GPS, forest map" />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <meta name="theme-color" content="#34C759" />
+    <link rel="canonical" href="https://shroomseeker.org/" />
     <link rel="icon" type="image/png" href="./assets/images/icon.png" />
     <link rel="apple-touch-icon" href="./assets/images/icon.png" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="ShroomSeeker" />
     <meta property="og:title" content="ShroomSeeker — Find more mushrooms. Remember every spot." />
     <meta
       property="og:description"
-      content="Track hiking routes, pin every find with GPS, draw search zones, and build your forest atlas. Built for iOS."
+      content="The iOS app for mushroom foragers. Track hiking routes, pin every find with GPS, draw forest zones, and build your personal atlas of mushroom spots."
     />
-    <meta property="og:image" content="./assets/og-image.png" />
-    <meta property="og:url" content="https://shroomseeker.app/" />
+    <meta property="og:image" content="https://shroomseeker.org/assets/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="ShroomSeeker — iOS app for mushroom foragers" />
+    <meta property="og:url" content="https://shroomseeker.org/" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="ShroomSeeker — Find more mushrooms. Remember every spot." />
+    <meta name="twitter:description" content="The iOS app for mushroom foragers. Track routes, pin finds, and draw your forest zones." />
+    <meta name="twitter:image" content="https://shroomseeker.org/assets/og-image.png" />
+    <meta name="twitter:image:alt" content="ShroomSeeker — iOS app for mushroom foragers" />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -182,6 +196,103 @@
         }
       }
     </style>
+
+    <!-- Structured data: WebSite -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "ShroomSeeker",
+        "url": "https://shroomseeker.org/",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Gradooc",
+          "url": "https://shroomseeker.org/",
+          "logo": "https://shroomseeker.org/assets/images/icon.png"
+        }
+      }
+    </script>
+
+    <!-- Structured data: MobileApplication -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "MobileApplication",
+        "name": "ShroomSeeker",
+        "operatingSystem": "iOS 17",
+        "applicationCategory": "LifestyleApplication",
+        "description": "iOS app for mushroom foragers. Track hiking routes with background GPS, pin every find, draw forest zones, sync with Apple Health, and build your personal atlas of mushroom spots.",
+        "url": "https://shroomseeker.org/",
+        "image": "https://shroomseeker.org/assets/og-image.png",
+        "screenshot": [
+          "https://shroomseeker.org/assets/images/active-hunt.png",
+          "https://shroomseeker.org/assets/images/hunts.png",
+          "https://shroomseeker.org/assets/images/hunt.png",
+          "https://shroomseeker.org/assets/images/polygon.png"
+        ],
+        "installUrl": "https://apps.apple.com/app/shroomseeker/id6763041579",
+        "downloadUrl": "https://apps.apple.com/app/shroomseeker/id6763041579",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "author": {
+          "@type": "Organization",
+          "name": "Gradooc"
+        }
+      }
+    </script>
+
+    <!-- Structured data: FAQ -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is ShroomSeeker available on Android?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Not yet. The first release is iOS-only because of deep integration with Apple HealthKit and background location. Android is on the roadmap."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Does it work without signal in the forest?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. Routes, finds and polygons live in a local SQLite database on your device. You can track, pin and draw all day without a single bar of signal."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where does my data live? Who sees my spots?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Your routes, finds and zones stay on your device. Authentication uses Supabase, but your hunting data isn't sold, shared, or indexed. Your secret spots stay yours."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Will tracking drain my battery?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "GPS sampling is tuned for long walks, not fast drives — expect a full day of tracking on a modern iPhone with room to spare."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is ShroomSeeker really free?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes — right now every feature is unlocked for everyone, no ads, no subscriptions. A Pro tier is planned for the future with new tools on top, but every feature available today will remain free for users who install the app during the early-access period."
+            }
+          }
+        ]
+      }
+    </script>
   </head>
   <body class="bg-cream text-ink overflow-x-hidden">
     <!-- ================== NAV ================== -->
