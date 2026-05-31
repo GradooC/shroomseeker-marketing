@@ -228,7 +228,8 @@
           "https://shroomseeker.org/assets/images/active-hunt.png",
           "https://shroomseeker.org/assets/images/hunts.png",
           "https://shroomseeker.org/assets/images/hunt.png",
-          "https://shroomseeker.org/assets/images/polygon.png"
+          "https://shroomseeker.org/assets/images/polygon.png",
+          "https://shroomseeker.org/assets/images/polygons.png"
         ],
         "installUrl": "https://apps.apple.com/app/shroomseeker/id6763041579",
         "downloadUrl": "https://apps.apple.com/app/shroomseeker/id6763041579",
@@ -703,8 +704,39 @@
           </figure>
         </div>
 
-        <!-- Share card callout -->
+        <!-- Forest scoreboard callout -->
         <div class="mt-20 reveal grid lg:grid-cols-2 gap-10 items-center rounded-[2rem] bg-gradient-to-br from-brand-50 to-cream p-8 lg:p-12 border border-ink/5">
+          <div class="flex justify-center">
+            <div class="relative box-content w-full max-w-[280px] aspect-[1206/2622] rounded-[2.5rem] border-[9px] border-ink bg-black shadow-card">
+              <div class="absolute inset-[1px] rounded-[2rem] overflow-hidden bg-white">
+                <img
+                  src="./assets/images/polygons.png"
+                  alt="Saved forests list, each scored by how favorable the weather is for mushroom growth"
+                  class="absolute inset-0 h-full w-full object-cover"
+                />
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="text-sm font-semibold uppercase tracking-widest text-brand-600">Forecast</div>
+            <h3 class="mt-3 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
+              Every forest, ranked by
+              <span class="serif-italic text-brand-600">the weather.</span>
+            </h3>
+            <p class="mt-4 text-ink/60 leading-relaxed">
+              Each forest you save gets a live growth score — how favorable the current weather is for
+              mushrooms to push up. One glance tells you where this weekend is actually worth the drive.
+            </p>
+            <ul class="mt-6 space-y-2 text-ink/80 text-sm">
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Live growth score for every zone</li>
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Sort by date, area, finds or growth</li>
+              <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-brand-500"></span> Color-coded so the best bet stands out</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Share card callout -->
+        <div class="mt-12 reveal grid lg:grid-cols-2 gap-10 items-center rounded-[2rem] bg-gradient-to-br from-brand-50 to-cream p-8 lg:p-12 border border-ink/5">
           <div>
             <div class="text-sm font-semibold uppercase tracking-widest text-brand-600">Share</div>
             <h3 class="mt-3 text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight">
